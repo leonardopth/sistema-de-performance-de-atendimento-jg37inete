@@ -8,10 +8,26 @@ interface StatCardProps {
   icon: LucideIcon
   trend?: number
   trendLabel?: string
+  compareEnabled?: boolean
+  previousValue?: string
+  deltaPct?: number
+  invertDelta?: boolean
 }
 
-export function StatCard({ title, value, icon: Icon, trend, trendLabel }: StatCardProps) {
-  const isPositive = (trend ?? 0) >= 0
+export function StatCard({
+  title,
+  value,
+  icon: Icon,
+  trend,
+  trendLabel,
+  compareEnabled,
+  previousValue,
+  deltaPct,
+  invertDelta,
+}: StatCardProps) {
+  const isPositive = (deltaPct ?? 0) >= 0
+  const isImprovement = invertDelta ? !isPositive : isPositive
+
   return (
     <Card>
       <CardContent className="p-6">
@@ -23,11 +39,11 @@ export function StatCard({ title, value, icon: Icon, trend, trendLabel }: StatCa
         </div>
         <div className="mt-2 flex items-baseline gap-2">
           <p className="text-2xl font-bold">{value}</p>
-          {trend !== undefined && (
+          {compareEnabled && previousValue && deltaPct !== undefined ? (
             <span
               className={cn(
                 'flex items-center text-xs font-medium',
-                isPositive
+                isImprovement
                   ? 'text-green-600 dark:text-green-400'
                   : 'text-red-600 dark:text-red-400',
               )}
@@ -37,10 +53,29 @@ export function StatCard({ title, value, icon: Icon, trend, trendLabel }: StatCa
               ) : (
                 <TrendingDown className="mr-1 h-3 w-3" />
               )}
+              {Math.abs(deltaPct).toFixed(1)}%
+            </span>
+          ) : trend !== undefined ? (
+            <span
+              className={cn(
+                'flex items-center text-xs font-medium',
+                (trend ?? 0) >= 0
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-red-600 dark:text-red-400',
+              )}
+            >
+              {(trend ?? 0) >= 0 ? (
+                <TrendingUp className="mr-1 h-3 w-3" />
+              ) : (
+                <TrendingDown className="mr-1 h-3 w-3" />
+              )}
               {Math.abs(trend)}%{trendLabel ? ` ${trendLabel}` : ''}
             </span>
-          )}
+          ) : null}
         </div>
+        {compareEnabled && previousValue && (
+          <p className="mt-1 text-xs text-muted-foreground">anterior: {previousValue}</p>
+        )}
       </CardContent>
     </Card>
   )

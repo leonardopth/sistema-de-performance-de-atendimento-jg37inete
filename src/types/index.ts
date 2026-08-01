@@ -48,6 +48,7 @@ export interface Goal {
   current: number
   period: string
   status: string
+  due_date?: string
   created: string
   updated: string
   expand?: Record<string, unknown>
@@ -60,6 +61,33 @@ export interface Evaluation {
   score: number
   feedback: string
   category: string
+  created: string
+  updated: string
+  expand?: Record<string, unknown>
+}
+
+export interface Notification {
+  id: string
+  title: string
+  message: string
+  type: 'goal_completed' | 'goal_overdue' | 'badge_earned' | 'system'
+  related_agent: string
+  related_goal: string
+  read: boolean
+  recipient: string
+  created: string
+  updated: string
+  expand?: Record<string, unknown>
+}
+
+export interface Achievement {
+  id: string
+  agent_id: string
+  title: string
+  description: string
+  icon: string
+  category: 'conversion' | 'productivity' | 'quality' | 'satisfaction' | 'goal'
+  awarded_at: string
   created: string
   updated: string
   expand?: Record<string, unknown>

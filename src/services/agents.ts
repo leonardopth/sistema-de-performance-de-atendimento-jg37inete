@@ -141,3 +141,11 @@ export const getAgents = async (): Promise<Agent[]> => {
     return mockAgents
   }
 }
+
+export const getAgent = async (id: string): Promise<Agent | null> => {
+  try {
+    return (await pb.collection('agents').getOne(id, { expand: 'team_id' })) as unknown as Agent
+  } catch {
+    return mockAgents.find((a) => a.id === id) || null
+  }
+}
