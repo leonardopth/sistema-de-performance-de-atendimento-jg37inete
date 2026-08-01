@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, useLocation, Navigate } from 'react-router-dom'
 import { useTheme } from 'next-themes'
 import { useAuth } from '@/hooks/use-auth'
+import { getUserRole, canAccessPage, getDefaultPage, type NavItem } from '@/hooks/use-permissions'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -19,18 +20,40 @@ import {
   LogOut,
   FileText,
   UserCircle,
+  UserCog,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const navItems = [
-  { path: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/agents', label: 'Agentes', icon: Users },
-  { path: '/teams', label: 'Equipes', icon: UsersRound },
-  { path: '/conversations', label: 'Conversas', icon: MessageSquare },
-  { path: '/goals', label: 'Metas', icon: Target },
-  { path: '/feedback', label: 'Avaliações', icon: Star },
-  { path: '/reports', label: 'Relatórios', icon: FileText },
-  { path: '/my-performance', label: 'Minha Performance', icon: UserCircle },
+const allNavItems: NavItem[] = [
+  {
+    path: '/',
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    roles: ['admin', 'gestor', 'supervisor'],
+  },
+  { path: '/agents', label: 'Agentes', icon: Users, roles: ['admin', 'gestor', 'supervisor'] },
+  { path: '/teams', label: 'Equipes', icon: UsersRound, roles: ['admin', 'gestor', 'supervisor'] },
+  {
+    path: '/conversations',
+    label: 'Conversas',
+    icon: MessageSquare,
+    roles: ['admin', 'gestor', 'supervisor'],
+  },
+  { path: '/goals', label: 'Metas', icon: Target, roles: ['admin', 'gestor', 'supervisor'] },
+  { path: '/feedback', label: 'Avaliações', icon: Star, roles: ['admin', 'gestor', 'supervisor'] },
+  {
+    path: '/reports',
+    label: 'Relatórios',
+    icon: FileText,
+    roles: ['admin', 'gestor', 'supervisor'],
+  },
+  {
+    path: '/my-performance',
+    label: 'Minha Performance',
+    icon: UserCircle,
+    roles: ['admin', 'gestor', 'supervisor', 'agente'],
+  },
+  { path: '/users', label: 'Usuários', icon: UserCog, roles: ['admin'] },
 ]
 
 export default function Layout() {
@@ -38,6 +61,13 @@ export default function Layout() {
   const { theme, setTheme } = useTheme()
   const { user, signOut } = useAuth()
   const location = useLocation()
+  const role = getUserRole(user)
+  const navItems = allNavItems.filter((item) => item.roles.includes(role))
+
+  if (!canAccessPage(user, location.pathname)) {
+    return <Navigate to={getDefaultPage(user)} replace />
+  }
+
   const userName = (user?.name as string) || 'Usuário'
 
   const SidebarNav = () => (

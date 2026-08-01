@@ -22,16 +22,24 @@ cronAdd('overdue_goals_check', '0 8 * * *', () => {
 
       var goalTitle = goal.getString('title')
       var agentId = goal.getString('agent_id')
+      var teamId = goal.getString('team_id')
       var agentName = ''
+      var teamName = ''
+
       if (agentId) {
         try {
-          var agent = $app.findRecordById('agents', agentId)
-          agentName = agent.getString('name')
+          agentName = $app.findRecordById('agents', agentId).getString('name')
+        } catch (_) {}
+      }
+      if (teamId) {
+        try {
+          teamName = $app.findRecordById('teams', teamId).getString('name')
         } catch (_) {}
       }
 
       var message = 'A meta "' + goalTitle + '" nao foi atingida'
       if (agentName) message += ' por ' + agentName
+      else if (teamName) message += ' pela equipe ' + teamName
       message += ' dentro do prazo.'
 
       for (var j = 0; j < users.length; j++) {

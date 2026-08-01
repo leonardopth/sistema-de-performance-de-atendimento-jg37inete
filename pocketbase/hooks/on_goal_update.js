@@ -12,17 +12,24 @@ onRecordAfterUpdateSuccess((e) => {
 
       var goalTitle = record.getString('title')
       var agentId = record.getString('agent_id')
+      var teamId = record.getString('team_id')
       var agentName = ''
+      var teamName = ''
 
       if (agentId) {
         try {
-          var agent = $app.findRecordById('agents', agentId)
-          agentName = agent.getString('name')
+          agentName = $app.findRecordById('agents', agentId).getString('name')
+        } catch (_) {}
+      }
+      if (teamId) {
+        try {
+          teamName = $app.findRecordById('teams', teamId).getString('name')
         } catch (_) {}
       }
 
       var message = 'A meta "' + goalTitle + '" foi atingida'
       if (agentName) message += ' por ' + agentName
+      else if (teamName) message += ' pela equipe ' + teamName
       message += '.'
 
       var users = $app.findRecordsByFilter('users', 'email != ""', '-created', 1000, 0)
@@ -64,7 +71,7 @@ onRecordAfterUpdateSuccess((e) => {
           for (var j = 0; j < users.length; j++) {
             var badgeNotif = new Record(notifCol)
             badgeNotif.set('title', 'Nova conquista!')
-            badgeNotif.set('message', agentName + ' conquistou "Meta Batida" 🎯')
+            badgeNotif.set('message', (agentName || 'Agente') + ' conquistou "Meta Batida" 🎯')
             badgeNotif.set('type', 'badge_earned')
             badgeNotif.set('read', false)
             badgeNotif.set('recipient', users[j].id)
