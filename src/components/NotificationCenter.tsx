@@ -10,6 +10,7 @@ import {
   markNotificationRead,
   deleteNotification,
 } from '@/services/notifications'
+import { ShareMenu } from '@/components/ShareMenu'
 import { cn } from '@/lib/utils'
 import type { Notification } from '@/types'
 
@@ -81,6 +82,7 @@ export function NotificationCenter() {
                     </p>
                   </div>
                   <div className="flex flex-col gap-1">
+                    <ShareMenu notification={notif} />
                     {!notif.read && (
                       <Button
                         variant="ghost"

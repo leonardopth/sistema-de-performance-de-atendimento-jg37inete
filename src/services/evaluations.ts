@@ -104,12 +104,10 @@ export const getEvaluations = async (): Promise<Evaluation[]> => {
 
 export const getEvaluationsByAgent = async (agentId: string): Promise<Evaluation[]> => {
   try {
-    return (await pb
-      .collection('evaluations')
-      .getFullList({
-        filter: `agent_id = "${agentId}"`,
-        sort: '-created',
-      })) as unknown as Evaluation[]
+    return (await pb.collection('evaluations').getFullList({
+      filter: `agent_id = "${agentId}"`,
+      sort: '-created',
+    })) as unknown as Evaluation[]
   } catch {
     return mockEvals.filter((e) => e.agent_id === agentId)
   }

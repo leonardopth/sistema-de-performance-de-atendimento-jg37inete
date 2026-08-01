@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { Button } from '@/components/ui/button'
+import { Plus } from 'lucide-react'
 import { useAsyncData } from '@/hooks/use-async-data'
 import { useRealtime } from '@/hooks/use-realtime'
 import { getGoals } from '@/services/goals'
 import { LoadingState, ErrorState } from '@/components/PageStates'
+import { CreateGoalDialog } from '@/components/goals/CreateGoalDialog'
 import type { Goal } from '@/types'
 
 const typeLabel: Record<string, string> = {
@@ -12,6 +16,13 @@ const typeLabel: Record<string, string> = {
   satisfaction: 'Satisfação',
   response_time: 'Tempo de Resposta',
 }
+
+const periodTypeLabel: Record<string, string> = {
+  monthly: 'Mensal',
+  quarterly: 'Trimestral',
+  custom: 'Personalizado',
+}
+
 const statusVariant: Record<string, 'default' | 'secondary' | 'destructive'> = {
   active: 'default',
   completed: 'secondary',
@@ -21,15 +32,22 @@ const statusVariant: Record<string, 'default' | 'secondary' | 'destructive'> = {
 export default function GoalsPage() {
   const { data, loading, error, reload } = useAsyncData<Goal[]>(() => getGoals())
   useRealtime('goals', () => reload())
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   if (loading) return <LoadingState message="Carregando metas..." />
   if (error || !data) return <ErrorState onRetry={reload} />
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Metas</h1>
-        <p className="text-sm text-muted-foreground">{data.length} metas em acompanhamento</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Metas</h1>
+          <p className="text-sm text-muted-foreground">{data.length} metas em acompanhamento</p>
+        </div>
+        <Button onClick={() => setDialogOpen(true)}>
+          <Plus className="h-4 w-4" />
+          Nova Meta
+        </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         {data.map((goal) => {
@@ -52,6 +70,11 @@ export default function GoalsPage() {
               <CardContent className="space-y-4">
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                   <Badge variant="outline">{typeLabel[goal.type] || goal.type}</Badge>
+                  {goal.period_type && (
+                    <Badge variant="outline">
+                      {periodTypeLabel[goal.period_type] || goal.period_type}
+                    </Badge>
+                  )}
                   {team && <span>• {team.name}</span>}
                   <span>• {goal.period}</span>
                 </div>
@@ -61,13 +84,21 @@ export default function GoalsPage() {
                     <span className="text-sm text-muted-foreground">/ {goal.target}</span>
                   </div>
                   <Progress value={progress} />
-                  <p className="text-xs text-muted-foreground">{progress}% concluído</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">{progress}% concluído</p>
+                    {goal.due_date && (
+                      <p className="text-xs text-muted-foreground">
+                        Prazo: {new Date(goal.due_date).toLocaleDateString('pt-BR')}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
           )
         })}
       </div>
+      <CreateGoalDialog open={dialogOpen} onOpenChange={setDialogOpen} onCreated={reload} />
     </div>
   )
 }

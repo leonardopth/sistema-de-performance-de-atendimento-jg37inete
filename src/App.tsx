@@ -14,6 +14,8 @@ import Teams from '@/pages/Teams'
 import Conversations from '@/pages/Conversations'
 import Goals from '@/pages/Goals'
 import Feedback from '@/pages/Feedback'
+import Reports from '@/pages/Reports'
+import MyPerformance from '@/pages/MyPerformance'
 import NotFound from '@/pages/NotFound'
 
 const App = () => (
@@ -34,6 +36,8 @@ const App = () => (
                   <Route path="/conversations" element={<Conversations />} />
                   <Route path="/goals" element={<Goals />} />
                   <Route path="/feedback" element={<Feedback />} />
+                  <Route path="/reports" element={<Reports />} />
+                  <Route path="/my-performance" element={<MyPerformance />} />
                 </Route>
               </Route>
               <Route path="*" element={<NotFound />} />

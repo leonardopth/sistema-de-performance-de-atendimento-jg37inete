@@ -49,9 +49,32 @@ export interface Goal {
   period: string
   status: string
   due_date?: string
+  period_type?: 'monthly' | 'quarterly' | 'custom'
+  period_start?: string
+  period_end?: string
   created: string
   updated: string
   expand?: Record<string, unknown>
+}
+
+export interface Report {
+  id: string
+  title: string
+  period_start: string
+  period_end: string
+  report_type: 'weekly' | 'monthly' | 'manual'
+  summary_data: string | Record<string, unknown>
+  created: string
+  updated: string
+}
+
+export interface ReportSchedule {
+  id: string
+  enabled: boolean
+  day_of_week: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday'
+  configured_by: string
+  created: string
+  updated: string
 }
 
 export interface Evaluation {

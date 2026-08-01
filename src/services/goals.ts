@@ -97,3 +97,24 @@ export const getGoals = async (): Promise<Goal[]> => {
     return mockGoals
   }
 }
+
+export const getGoalsByAgent = async (agentId: string): Promise<Goal[]> => {
+  if (!agentId) return []
+  try {
+    return (await pb.collection('goals').getFullList({
+      filter: `agent_id = "${agentId}"`,
+      expand: 'team_id',
+      sort: '-created',
+    })) as unknown as Goal[]
+  } catch {
+    return mockGoals.filter((g) => g.agent_id === agentId)
+  }
+}
+
+export const createGoal = async (data: Record<string, unknown>): Promise<Goal | null> => {
+  try {
+    return (await pb.collection('goals').create(data)) as unknown as Goal
+  } catch {
+    return null
+  }
+}

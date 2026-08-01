@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { NotificationCenter } from '@/components/NotificationCenter'
 import {
   LayoutDashboard,
   Users,
@@ -16,6 +17,8 @@ import {
   Sun,
   Menu,
   LogOut,
+  FileText,
+  UserCircle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -26,6 +29,8 @@ const navItems = [
   { path: '/conversations', label: 'Conversas', icon: MessageSquare },
   { path: '/goals', label: 'Metas', icon: Target },
   { path: '/feedback', label: 'Avaliações', icon: Star },
+  { path: '/reports', label: 'Relatórios', icon: FileText },
+  { path: '/my-performance', label: 'Minha Performance', icon: UserCircle },
 ]
 
 export default function Layout() {
@@ -85,6 +90,7 @@ export default function Layout() {
           </Button>
           <div className="hidden md:block" />
           <div className="flex items-center gap-2">
+            <NotificationCenter />
             <Button
               variant="ghost"
               size="icon"

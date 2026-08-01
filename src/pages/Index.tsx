@@ -9,6 +9,8 @@ import { ConversionChart } from '@/components/dashboard/ConversionChart'
 import { TeamChart } from '@/components/dashboard/TeamChart'
 import { TopPerformers } from '@/components/dashboard/TopPerformers'
 import { AgentTable } from '@/components/dashboard/AgentTable'
+import { DateRangeExport } from '@/components/dashboard/DateRangeExport'
+import { downloadCSV } from '@/lib/export-utils'
 import { MessageSquare, Percent, Clock, Star } from 'lucide-react'
 import type { Agent } from '@/types'
 
@@ -53,13 +55,54 @@ export default function Index() {
   if (loading) return <LoadingState message="Carregando dashboard..." />
   if (error || !agents || !stats) return <ErrorState onRetry={reload} />
 
+  const handleCSVExport = (startDate: string, endDate: string) => {
+    const rows: (string | number)[][] = [
+      ['Relatório de Performance'],
+      [`Período: ${startDate} a ${endDate}`],
+      [],
+      ['Agente', 'Equipe', 'Conversas', 'Conversão (%)', 'Tempo Resposta (s)', 'Satisfação'],
+      ...agents.map((a) => [
+        a.name,
+        (a.expand?.team_id as { name?: string })?.name || 'Sem equipe',
+        a.total_conversations,
+        a.conversion_rate,
+        a.avg_response_time,
+        a.satisfaction_score,
+      ]),
+    ]
+    downloadCSV(`performance_${startDate}_${endDate}`, rows)
+  }
+
+  const handlePDFExport = (startDate: string, endDate: string) => {
+    const w = window.open('', '_blank')
+    if (!w) return
+    w.document.write(`<html><head><title>Relatório de Performance</title></head><body>
+      <h1>Relatório de Performance</h1>
+      <p>Período: ${startDate} a ${endDate}</p>
+      <table border="1" cellpadding="5" cellspacing="0"><thead><tr>
+      <th>Agente</th><th>Equipe</th><th>Conversas</th><th>Conversão (%)</th><th>Tempo Resposta (s)</th><th>Satisfação</th>
+      </tr></thead><tbody>
+      ${agents
+        .map(
+          (a) =>
+            `<tr><td>${a.name}</td><td>${(a.expand?.team_id as { name?: string })?.name || 'Sem equipe'}</td><td>${a.total_conversations}</td><td>${a.conversion_rate}</td><td>${a.avg_response_time}</td><td>${a.satisfaction_score}</td></tr>`,
+        )
+        .join('')}
+      </tbody></table></body></html>`)
+    w.document.close()
+    w.print()
+  }
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">
-          Visão geral da performance da equipe de atendimento
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">
+            Visão geral da performance da equipe de atendimento
+          </p>
+        </div>
+        <DateRangeExport onCSV={handleCSVExport} onPDF={handlePDFExport} />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard

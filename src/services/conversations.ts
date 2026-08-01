@@ -46,13 +46,26 @@ export const getConversations = async (
 
 export const getConversationsByAgent = async (agentId: string): Promise<Conversation[]> => {
   try {
-    return (await pb
-      .collection('conversations')
-      .getFullList({
-        filter: `agent_id = "${agentId}"`,
-        sort: '-started_at',
-      })) as unknown as Conversation[]
+    return (await pb.collection('conversations').getFullList({
+      filter: `agent_id = "${agentId}"`,
+      sort: '-started_at',
+    })) as unknown as Conversation[]
   } catch {
     return mockItems.filter((c) => c.agent_id === agentId)
+  }
+}
+
+export const getConversationsByDateRange = async (
+  startDate: string,
+  endDate: string,
+): Promise<Conversation[]> => {
+  try {
+    return (await pb.collection('conversations').getFullList({
+      filter: `started_at >= "${startDate}" && started_at <= "${endDate}"`,
+      expand: 'agent_id',
+      sort: '-started_at',
+    })) as unknown as Conversation[]
+  } catch {
+    return []
   }
 }

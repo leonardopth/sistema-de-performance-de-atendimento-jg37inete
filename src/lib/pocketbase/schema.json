@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-01T13:13:08.775Z",
+  "generatedAt": "2026-08-01T13:39:51.506Z",
   "collections": [
     {
       "name": "users",
@@ -337,6 +337,25 @@
           "type": "date",
           "required": false,
           "system": false
+        },
+        {
+          "name": "period_type",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["monthly", "quarterly", "custom"]
+        },
+        {
+          "name": "period_start",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "period_end",
+          "type": "date",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": ["CREATE INDEX idx_goals_agent ON goals (agent_id)"]
@@ -547,6 +566,121 @@
         "CREATE INDEX idx_achievements_agent ON achievements (agent_id)",
         "CREATE INDEX idx_achievements_category ON achievements (category)"
       ]
+    },
+    {
+      "name": "report_schedules",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != ''",
+        "view": "@request.auth.id != ''",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "enabled",
+          "type": "bool",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "day_of_week",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday"
+          ]
+        },
+        {
+          "name": "configured_by",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "reports",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != ''",
+        "view": "@request.auth.id != ''",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "period_start",
+          "type": "date",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "period_end",
+          "type": "date",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "report_type",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["weekly", "monthly", "manual"]
+        },
+        {
+          "name": "summary_data",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": ["CREATE INDEX idx_reports_created ON reports (created)"]
     }
   ]
 }

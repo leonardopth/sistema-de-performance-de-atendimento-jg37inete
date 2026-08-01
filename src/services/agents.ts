@@ -149,3 +149,14 @@ export const getAgent = async (id: string): Promise<Agent | null> => {
     return mockAgents.find((a) => a.id === id) || null
   }
 }
+
+export const getAgentByEmail = async (email: string): Promise<Agent | null> => {
+  if (!email) return null
+  try {
+    return (await pb
+      .collection('agents')
+      .getFirstListItem(`email = "${email}"`, { expand: 'team_id' })) as unknown as Agent
+  } catch {
+    return mockAgents.find((a) => a.email === email) || null
+  }
+}
