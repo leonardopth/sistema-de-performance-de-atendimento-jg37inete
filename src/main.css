@@ -17,7 +17,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 24 95% 53%;
+    --primary: 195 90% 45%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96%;
@@ -26,7 +26,7 @@
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96%;
+    --accent: 315 70% 96%;
     --accent-foreground: 222 47% 11%;
 
     --destructive: 0 84% 60%;
@@ -34,24 +34,24 @@
 
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 24 95% 53%;
+    --ring: 195 90% 45%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 24 95% 53%;
+    --sidebar-primary: 195 90% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 40% 96%;
     --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 24 95% 53%;
+    --sidebar-ring: 195 90% 45%;
 
-    --chart-1: 24 95% 53%;
-    --chart-2: 189 100% 38%;
-    --chart-3: 280 65% 60%;
-    --chart-4: 142 71% 45%;
-    --chart-5: 0 84% 60%;
+    --chart-1: 195 90% 48%;
+    --chart-2: 315 85% 55%;
+    --chart-3: 25 95% 55%;
+    --chart-4: 160 84% 42%;
+    --chart-5: 270 75% 60%;
   }
 
   .dark {
@@ -64,7 +64,7 @@
     --popover: 222 47% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 24 95% 53%;
+    --primary: 195 90% 48%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 217 33% 12%;
@@ -73,7 +73,7 @@
     --muted: 217 33% 15%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 217 33% 15%;
+    --accent: 315 60% 18%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 72% 51%;
@@ -81,21 +81,21 @@
 
     --border: 217 33% 18%;
     --input: 217 33% 18%;
-    --ring: 24 95% 53%;
+    --ring: 195 90% 48%;
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 24 95% 53%;
+    --sidebar-primary: 195 90% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 217 33% 15%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 217 33% 18%;
-    --sidebar-ring: 24 95% 53%;
+    --sidebar-ring: 195 90% 48%;
 
-    --chart-1: 24 95% 53%;
-    --chart-2: 189 100% 42%;
-    --chart-3: 280 65% 65%;
-    --chart-4: 142 71% 50%;
-    --chart-5: 0 72% 55%;
+    --chart-1: 195 90% 50%;
+    --chart-2: 315 85% 60%;
+    --chart-3: 25 95% 58%;
+    --chart-4: 160 84% 45%;
+    --chart-5: 270 75% 65%;
   }
 
   section[aria-label='Notifications alt+T'] {

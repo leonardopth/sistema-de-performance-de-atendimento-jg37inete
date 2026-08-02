@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { NotificationCenter } from '@/components/NotificationCenter'
+import logoImg from '@/assets/image-7e342.png'
 import {
   LayoutDashboard,
   Users,
@@ -95,9 +96,8 @@ export default function Layout() {
   )
 
   const Logo = () => (
-    <div className="flex h-16 items-center gap-2 border-b px-6">
-      <div className="h-8 w-8 rounded-lg bg-primary" />
-      <span className="font-semibold">Performance</span>
+    <div className="flex h-16 items-center gap-2 border-b px-4 bg-slate-950">
+      <img src={logoImg} alt="Rextur Advance" className="h-8 w-auto object-contain" />
     </div>
   )
 
